@@ -10,9 +10,12 @@ firebaseConnection(); // Asegúrate de que la conexión Firebase esté correctam
 const storage = getStorage();
 
 export const registrarJuego = async (req, res) => {
-  try {
+  try { 
+    
+    const { consola, titulo, descripcion, genero, estado, precio, totalAlquileres } = req.body;
+    const userid = req.params.userid;
     // Verificar que se han subido exactamente 2 imágenes
-    if (!req.files || req.files.length === 2) {
+    if (!req.files || req.files.length !== 2) {
       return res.status(400).json({ message: "Se deben subir exactamente 2 imágenes" });
     }
 
@@ -38,8 +41,7 @@ export const registrarJuego = async (req, res) => {
     }
 
     // Extraemos los datos del cuerpo de la solicitud
-    const { consola, titulo, descripcion, genero, estado, precio, totalAlquileres } = req.body;
-    const userid = req.params.userid; // Asegúrate de que el parámetro de la ruta sea correcto
+    // Asegúrate de que el parámetro de la ruta sea correcto
 
     // Crear un nuevo juego en el modelo
     const nuevoJuego = new juegoModel({
@@ -64,3 +66,12 @@ export const registrarJuego = async (req, res) => {
     res.status(500).json({ message: "Error interno al registrar el juego", error: error.message });
   }
 };
+
+export  const listaDeJuegos = async (req,res) =>{
+  try {
+    const todosLosJuegos = await juegoModel.find();
+    res.status(200).json(todosLosJuegos)
+  } catch (error) {
+    res.status(400).json({message:"Error al mostrar todos los juegos"})
+  }
+}

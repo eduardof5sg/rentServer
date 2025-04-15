@@ -14,8 +14,8 @@ app.use(cors());
 app.use(express.json());
 
 // rutas
-app.use('/users', userRutas),
-app.use('/juegos',juegoRoutes)
+app.use('/users', userRutas);
+app.use('/juegos',juegoRoutes);
 //
 
 
