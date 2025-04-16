@@ -12,7 +12,7 @@ const storage = getStorage();
 export const registrarJuego = async (req, res) => {
   try { 
     
-    const { consola, titulo, descripcion, genero, estado, precio, totalAlquileres } = req.body;
+    const { consola, titulo, descripcion, genero, estado, precio, totalalquileres } = req.body;
     const userid = req.params.userid;
     // Verificar que se han subido exactamente 2 imágenes
     if (!req.files || req.files.length !== 2) {
@@ -51,7 +51,7 @@ export const registrarJuego = async (req, res) => {
       genero,
       estado,
       precio,
-      totalAlquileres,
+      totalalquileres,
       imagenes: imagenUrls, // Almacenamos las URLs de las 2 imágenes
       userid: userid, // ID del usuario que sube el juego
     });

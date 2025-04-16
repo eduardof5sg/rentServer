@@ -7,7 +7,7 @@ const alquilerSchema = mongoose.Schema({
         required: true,
     },
 
-    juego : {
+    juegoid: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'juegos',
         required : true
@@ -20,7 +20,15 @@ const alquilerSchema = mongoose.Schema({
     },
 
     preciofinal : {type:Number, required:true},
-    fechainicio : {type: String, required:true }
+    fechasolicitud:{type:String, required:true},
+    fechainicio : {type: String },
+    fechafin : {type: String },
+    estado: {
+        type: String,
+        enum: ["solicitado", "confirmado", "en reparto", "entregado", "cancelado"],
+        default: "solicitado"
+      },
+
 })
 
 const alquilerModel = mongoose.model('alquiler', alquilerSchema);

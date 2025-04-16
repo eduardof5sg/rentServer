@@ -7,13 +7,18 @@ const userSchema = mongoose.Schema({
     codigopostal:{type:String, required:true},
     telefono:{type:Number , unique:true, required:true},
     contraseña: {type:String, required:true},
-    rol:{type:String, default:"user"},
+    rol: {
+      type: String,
+      enum: ['user', 'admin', 'repartidor'],
+      default: 'user'
+    },
     fotoperfil: { type: String },
     estadocuenta: {
         type: String,
         enum: ['activo', 'suspendido', 'baneado'],
         default: 'activo'
       },
+    
     
 });
 

@@ -14,7 +14,7 @@ const juegoSchema = mongoose.Schema({
     estado: {type: String, required:true},
     disponibilidad : {type: Boolean, default:true},
     precio: {type:Number, required:true},
-    totalAlquileres: { type: Number, default: 0 },
+    totalalquileres: { type: Number, default: 0 },
     imagenes: { type: [String], required:true },
 
 })
