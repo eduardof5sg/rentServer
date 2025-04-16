@@ -42,3 +42,16 @@ export const crearUsuario = async (req,res) =>{
         res.status(500).json({ error: "Error al registrar el usuario" });
     }
 }
+
+export const datosEntrega = async (req,res) =>{
+    try {
+        const cliente = req.params.cliente
+        const datosCliente = await userModel.findOne({ _id: cliente }).select('nombre telefono direccion codigopostal');
+        if(!datosCliente){
+            return res.status(400).json({message:"El cliente no existe"})
+        }
+        res.status(200).json(datosCliente)
+    } catch (error) {
+        res.status(400).json({message:"Fallo al obtener datos de la entrega"})
+    }
+}

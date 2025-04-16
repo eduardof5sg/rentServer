@@ -67,11 +67,37 @@ export const registrarJuego = async (req, res) => {
   }
 };
 
-export  const listaDeJuegos = async (req,res) =>{
+export const listaDeJuegos = async (req, res) => {
   try {
-    const todosLosJuegos = await juegoModel.find();
-    res.status(200).json(todosLosJuegos)
+    const { consola } = req.query; // Obtenemos el filtro por consola desde la query params
+
+    // Si no se pasa el parámetro de consola, mostramos todos los juegos
+    let juegos;
+    if (consola) {
+      // Filtramos por consola si se proporciona en los parámetros
+      juegos = await juegoModel.find({ consola: { $in: [consola] } });
+    } else {
+      // Si no se pasa consola, mostramos todos los juegos
+      juegos = await juegoModel.find();
+    }
+
+    res.status(200).json(juegos);
   } catch (error) {
-    res.status(400).json({message:"Error al mostrar todos los juegos"})
+    console.error(error);
+    res.status(400).json({ message: "Error al mostrar todos los juegos" });
+  }
+};
+
+export const juegosUsuario = async (req,res) =>{
+  try {
+    const userid = req.params.userid
+    const misjuegos = await juegoModel.findOne({userid});
+    if(!misjuegos){
+      return res.status(400).json({message:"No tienes ningun juego registrado"})
+    }
+
+    res.status(200).json(misjuegos)
+  } catch (error) {
+    res.status(400).json({message:"Fallo en el servidor"})
   }
 }

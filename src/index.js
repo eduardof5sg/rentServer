@@ -3,6 +3,7 @@ import cors from "cors"
 import userRutas from "./rutas/userRutas.js";
 import juegoRoutes from "./rutas/juegosRutas.js";
 import alquilerRoutes from "./rutas/alquilerRutas.js";
+import authRoutes from "./rutas/loginRutas.js";
 
 // base de datos
 
@@ -18,6 +19,7 @@ app.use(express.json());
 app.use('/users', userRutas);
 app.use('/juegos',juegoRoutes);
 app.use('/alquiler', alquilerRoutes);
+app.use('/login', authRoutes)
 //
 
 
