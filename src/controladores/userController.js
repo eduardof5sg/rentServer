@@ -6,6 +6,7 @@ export const crearUsuario = async (req,res) =>{
         const  {
             nombre,
             apellidos,
+            edad,
             direccion,
             codigopostal,
             telefono,
@@ -28,6 +29,7 @@ export const crearUsuario = async (req,res) =>{
             const nuevoUsuario = new userModel ({
                 nombre,
                 apellidos,
+                edad,
                 direccion,
                 codigopostal,
                 telefono,

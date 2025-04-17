@@ -101,3 +101,16 @@ export const juegosUsuario = async (req,res) =>{
     res.status(400).json({message:"Fallo en el servidor"})
   }
 }
+
+export const juegounico = async(req,res) =>{
+  try {
+    const juegoid = req.params.juegoid
+    const game = await juegoModel.findById(juegoid)
+    if(!game){
+      return res.status(400).json({message:"Este juego no existe"})
+    }
+    res
+  } catch (error) {
+    
+  }
+}
