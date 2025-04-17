@@ -13,6 +13,7 @@ const userSchema = mongoose.Schema({
       enum: ['user', 'admin', 'repartidor'],
       default: 'user'
     },
+    verificado : {type:Boolean, default:false},
     fotoperfil: { type: String },
     estadocuenta: {
         type: String,
