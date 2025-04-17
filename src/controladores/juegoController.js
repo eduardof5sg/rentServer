@@ -105,12 +105,12 @@ export const juegosUsuario = async (req,res) =>{
 export const juegounico = async(req,res) =>{
   try {
     const juegoid = req.params.juegoid
-    const game = await juegoModel.findById(juegoid)
+    const game = await juegoModel.findById({_id:juegoid})
     if(!game){
       return res.status(400).json({message:"Este juego no existe"})
     }
-    res
+    res.status(200).json(game)
   } catch (error) {
-    
+    res.status(400).json({message:"Fallo en la peticion de detalles del juego"})
   }
 }

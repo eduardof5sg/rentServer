@@ -7,7 +7,7 @@ export const login = async(req,res) =>{
     try {
         const phone = await userModel.findOne({telefono});
         if(!phone){
-            return res.status(400).json({messsage:"Este telefono no ha sido registrado"})
+            return res.status(400).json({message:"Este telefono no ha sido registrado"})
         }
         const validarContraseña = await bcrypt.compare(contraseña, phone.contraseña);
         if(!validarContraseña){
