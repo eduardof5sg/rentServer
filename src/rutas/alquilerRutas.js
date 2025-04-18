@@ -4,6 +4,6 @@ import { confirmarAlquiler, solicitudAlquiler } from "../controladores/alquilerC
 const alquilerRoutes = express.Router();
 
 alquilerRoutes.post('/:juegoid', solicitudAlquiler);
-alquilerRoutes.put('/:userid', confirmarAlquiler)
+alquilerRoutes.put('/confirmar/:userid', confirmarAlquiler)
 
 export default alquilerRoutes;

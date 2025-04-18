@@ -27,6 +27,9 @@ export const solicitudAlquiler = async(req,res) =>{
             fechasolicitud
         });
         await nuevoAlquiler.save();
+        await juegoModel.findByIdAndUpdate(juegoid, {
+            disponibilidad: false,
+          });
         res.status(201).json(nuevoAlquiler)
     } catch (error) {
         res.status(400).json({message:"Fallo en la solicitud de nuevo alquiler"})
@@ -43,9 +46,7 @@ export const confirmarAlquiler = async(req,res) =>{
 
         solicitudesUsuario.estado = "confirmado";
         await solicitudesUsuario.save();
-        await juegoModel.findByIdAndUpdate(solicitudesUsuario.juegoid, {
-            disponibilidad: false,
-          });
+       
       
           res.status(200).json({ message: "Alquiler confirmado", solicitudesUsuario });
     } catch (error) {
