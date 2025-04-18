@@ -57,3 +57,17 @@ export const datosEntrega = async (req,res) =>{
         res.status(400).json({message:"Fallo al obtener datos de la entrega"})
     }
 }
+
+export const miusuario = async (req,res) =>{
+    try {
+        const userid = req.params.userid
+        const datos = await userModel.findOne({_id:userid})
+        if(!datos) {
+            return res.status(400).json({message:"Tu usuario esta bloqueado o no existe, ponte en contacto con el administrador"})
+        }
+
+        res.status(200).json(datos)
+    } catch (error) {
+        res.status(400).json({message:"Fallo en la ejecucion"})
+    }
+}

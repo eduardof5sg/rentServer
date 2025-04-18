@@ -36,20 +36,39 @@ export const solicitudAlquiler = async(req,res) =>{
     }
 }
 
-export const confirmarAlquiler = async(req,res) =>{
+export const confirmarAlquiler = async(req,res) => {
     try {
-        const propietario = req.params.userid;
-        const solicitudesUsuario = await alquilerModel.findOne({propietario});
-        if(!solicitudesUsuario){
-            return res.status(404).json({message:"No hay solicitudes de alquiler para este usuario"})
+        const solicitudId = req.params.solicitudid;
+        const solicitud = await alquilerModel.findById(solicitudId);
+
+        if (!solicitud) {
+            return res.status(404).json({ message: "Solicitud no encontrada" });
         }
 
-        solicitudesUsuario.estado = "confirmado";
-        await solicitudesUsuario.save();
-       
-      
-          res.status(200).json({ message: "Alquiler confirmado", solicitudesUsuario });
+        solicitud.estado = "confirmado";
+        await solicitud.save();
+
+        res.status(200).json({ message: "Alquiler confirmado", solicitud });
     } catch (error) {
         res.status(500).json({ message: "Error interno al confirmar el alquiler" });
+    }
+};
+
+export const solicitudjuego = async(req,res) =>{
+    try {
+        const propietario = req.params.userid ;
+        const solicitudes = await alquilerModel.find({
+            propietario,
+            estado:"solicitado"
+        }) 
+        .populate("juegoid", "titulo consola imagenes") // puedes agregar más campos si deseas
+        .populate("cliente", "nombre apellidos");
+        if (solicitudes.length === 0) {
+            return res.status(404).json({ message: "No hay solicitudes pendientes." });
+          }
+      
+          res.status(200).json(solicitudes);
+    } catch (error) {
+        res.status(500).json({ message: "Error al obtener las solicitudes." });
     }
 }
