@@ -91,7 +91,7 @@ export const listaDeJuegos = async (req, res) => {
 export const juegosUsuario = async (req,res) =>{
   try {
     const userid = req.params.userid
-    const misjuegos = await juegoModel.findOne({userid});
+    const misjuegos = await juegoModel.find({userid});
     if(!misjuegos){
       return res.status(400).json({message:"No tienes ningun juego registrado"})
     }
