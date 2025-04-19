@@ -73,6 +73,24 @@ export const solicitudjuego = async(req,res) =>{
     }
 }
 
+export const juegosAlquilados = async(req,res) =>{
+    try {
+        const propietario = req.params.userid ;
+        const solicitudes = await alquilerModel.find({
+            propietario,
+        }) 
+        .populate("juegoid", "titulo") // puedes agregar más campos si deseas
+        .populate("cliente", "nombre direccion telefono");
+        if (solicitudes.length === 0) {
+            return res.status(404).json({ message: "No hay solicitudes pendientes." });
+          }
+      
+          res.status(200).json(solicitudes);
+    } catch (error) {
+        res.status(500).json({ message: "Error al obtener las solicitudes." });
+    }
+}
+
 export const eliminarSolicitud = async (req, res) => {
     try {
       const solicitudid = req.params.solicitudid;
