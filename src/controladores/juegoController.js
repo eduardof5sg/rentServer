@@ -76,7 +76,7 @@ export const listaDeJuegos = async (req, res) => {
     if (consola) {
       // Filtramos por consola si se proporciona en los parámetros
       juegos = await juegoModel.find({ consola: { $in: [consola] } })
-      .populate("userid", "codigopostal");
+      .populate("userid", "codigopostal verificado");
     } else {
       // Si no se pasa consola, mostramos todos los juegos
       juegos = await juegoModel.find();
