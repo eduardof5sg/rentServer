@@ -16,7 +16,7 @@ export const solicitudAlquiler = async(req,res) =>{
 
         // Verificar coincidencia de código postal
         if (userPropietario.codigopostal !== userCliente.codigopostal) {
-        return res.status(400).json({ message: "Para evitar gastos logisticos mas elevados, te sugerimos alquilar juegos dentro de tu codigo postal" });
+        return res.status(400).json({ message: "Para evitar el incremento en el precio de envio, te sugerimos alquilar juegos dentro de tu codigo postal" });
         }
 
         const nuevoAlquiler = new alquilerModel ({
