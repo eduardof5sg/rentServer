@@ -1,5 +1,5 @@
 import express from "express"
-import { confirmarAlquiler, eliminarSolicitud, juegosAlquilados, solicitudAlquiler, solicitudjuego } from "../controladores/alquilerController.js";
+import { confirmarAlquiler, eliminarSolicitud, juegosAlquilados, juegosPedidos, solicitudAlquiler, solicitudjuego } from "../controladores/alquilerController.js";
 
 const alquilerRoutes = express.Router();
 
@@ -8,5 +8,6 @@ alquilerRoutes.put('/confirmar/:solicitudid', confirmarAlquiler);
 alquilerRoutes.get('/solicitudes/:userid',solicitudjuego);
 alquilerRoutes.delete('/:solicitudid' , eliminarSolicitud);
 alquilerRoutes.get('/alquilados/:userid', juegosAlquilados)
+alquilerRoutes.get('/pedidos/:userid', juegosPedidos)
 
 export default alquilerRoutes;

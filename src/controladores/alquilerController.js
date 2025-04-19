@@ -16,7 +16,7 @@ export const solicitudAlquiler = async(req,res) =>{
 
         // Verificar coincidencia de código postal
         if (userPropietario.codigopostal !== userCliente.codigopostal) {
-        return res.status(400).json({ message: "Operación fallida: Los codigos postales deben coincidir" });
+        return res.status(400).json({ message: "Para evitar gastos logisticos mas elevados, te sugerimos alquilar juegos dentro de tu codigo postal" });
         }
 
         const nuevoAlquiler = new alquilerModel ({
@@ -80,7 +80,25 @@ export const juegosAlquilados = async(req,res) =>{
             propietario,
         }) 
         .populate("juegoid", "titulo") // puedes agregar más campos si deseas
-        .populate("cliente", "nombre direccion telefono");
+        .populate("cliente", "nombre  telefono");
+        if (solicitudes.length === 0) {
+            return res.status(404).json({ message: "No hay solicitudes pendientes." });
+          }
+      
+          res.status(200).json(solicitudes);
+    } catch (error) {
+        res.status(500).json({ message: "Error al obtener las solicitudes." });
+    }
+}
+
+export const juegosPedidos = async(req,res) =>{
+    try {
+        const cliente = req.params.userid ;
+        const solicitudes = await alquilerModel.find({
+            cliente
+        }) 
+        .populate("juegoid", "titulo") // puedes agregar más campos si deseas
+        .populate("propietario", "nombre  telefono");
         if (solicitudes.length === 0) {
             return res.status(404).json({ message: "No hay solicitudes pendientes." });
           }
