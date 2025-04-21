@@ -80,3 +80,27 @@ export const alquileresPorCP = async (req, res) => {
         return res.status(500).json({ message: "Error interno del servidor." });
     }
 }
+
+export const incidenciasDelivery = async (req, res) => {
+  try {
+    const alquilerid = req.params.alquilerid;
+    const cpRepartidor = req.user.codigopostal;
+    const { incidencia } = req.body;
+
+    const pedido = await alquilerModel.findOne({ _id: alquilerid }).populate({
+      path: 'cliente',
+      match: { codigopostal: cpRepartidor },
+    });
+
+    if (!pedido || !pedido.cliente) {
+      return res.status(400).json({ message: "El pedido no existe o no pertenece a tu zona" });
+    }
+
+    pedido.incidencias = incidencia;
+    await pedido.save();
+
+    return res.status(200).json({ message: "Incidencia creada correctamente", pedido });
+  } catch (error) {
+    return res.status(500).json({ message: "Fallo en el servidor" });
+  }
+};

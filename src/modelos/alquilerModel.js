@@ -26,9 +26,10 @@ const alquilerSchema = mongoose.Schema({
     fechafin : {type: String },
     estado: {
         type: String,
-        enum: ["solicitado", "confirmado", "en reparto", "entregado", "cancelado"],
+        enum: ["solicitado", "confirmado", "en reparto", "entregado", "cancelado", "devuelto"],
         default: "solicitado"
       },
+    incidencias :{type:String, default:"Sin incidencias"}
 
 })
 
