@@ -2,8 +2,6 @@ import alquilerModel from "../modelos/alquilerModel.js";
 
 export const deliveryReparto = async(req,res) =>{
     try {
-      console.log("🧾 Headers recibidos:", req.headers);
-      console.log("🔑 Token:", req.headers.authorization);
         const alquilerid = req.params.alquilerid
         const cpRepartidor = req.user.codigopostal
         const reparto = await alquilerModel.findOne({ _id: alquilerid })
@@ -62,3 +60,23 @@ export const alquileresPorCP = async (req, res) => {
       return res.status(500).json({ message: "Hubo un error al obtener los alquileres." });
     }
   };
+
+  export const historialReparto = async(req,res) =>{
+    try {
+        const cpRepartidor = req.user.codigopostal
+        const repartos = await alquilerModel.find()
+        .populate('cliente', 'direccion codigopostal nombre apellidos')
+        .populate('propietario', 'direccion nombre apellidos');
+
+        if (!repartos || repartos.lenght === 0) {
+            return res.status(404).json({ message: "No existe ninguna solicitud de reparto." });
+        }
+        const repartosFiltrados = repartos.filter(
+          (r) => r.cliente && r.cliente.codigopostal === cpRepartidor
+        );
+        return res.status(200).json({reparto:repartosFiltrados});
+
+    } catch (error) {
+        return res.status(500).json({ message: "Error interno del servidor." });
+    }
+}
