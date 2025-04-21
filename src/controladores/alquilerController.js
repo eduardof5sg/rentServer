@@ -63,7 +63,7 @@ export const solicitudjuego = async(req,res) =>{
         }) 
         .populate("juegoid", "titulo consola imagenes") // puedes agregar más campos si deseas
         .populate("cliente", "nombre apellidos");
-        if (solicitudes.length === 0) {
+        if (!solicitudes) {
             return res.status(404).json({ message: "No hay solicitudes pendientes." });
           }
       
@@ -143,4 +143,33 @@ export const eliminarSolicitud = async (req, res) => {
       res.status(500).json({ message: "Error al eliminar la solicitud" });
     }
   };
+
+  export const confirmarEntrega = async (req, res) => {
+    try {
+      const alquilerid = req.params.alquilerid;
+      const { fechainicio, fechafin } = req.body;
   
+      // Buscar el alquiler
+      const alquiler = await alquilerModel.findById(alquilerid);
+  
+      if (!alquiler) {
+        return res.status(404).json({ message: "Este pedido no existe." });
+      }
+  
+      if (alquiler.estado !== "en reparto") {
+        return res.status(400).json({ message: "Este pedido no está en reparto." });
+      }
+  
+      // Actualizar campos
+      alquiler.estado = "entregado";
+      alquiler.fechainicio = fechainicio || new Date().toISOString(); // o puedes esperar que se lo mandes tú
+      alquiler.fechafin = fechafin || new Date().toISOString();
+  
+      await alquiler.save();
+  
+      return res.status(200).json({ message: "Entrega confirmada.", alquiler });
+    } catch (error) {
+      console.error("Error al confirmar entrega:", error);
+      return res.status(500).json({ message: "Error interno del servidor." });
+    }
+  };

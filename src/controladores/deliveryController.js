@@ -2,6 +2,8 @@ import alquilerModel from "../modelos/alquilerModel.js";
 
 export const deliveryReparto = async(req,res) =>{
     try {
+      console.log("🧾 Headers recibidos:", req.headers);
+      console.log("🔑 Token:", req.headers.authorization);
         const alquilerid = req.params.alquilerid
         const cpRepartidor = req.user.codigopostal
         const reparto = await alquilerModel.findOne({ _id: alquilerid })
