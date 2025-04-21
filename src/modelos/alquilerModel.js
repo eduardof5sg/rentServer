@@ -21,6 +21,7 @@ const alquilerSchema = mongoose.Schema({
     metodopago:{type:String ,default:"efectivo"},
 
     preciofinal : {type:Number, required:true},
+    semanas :{type:Number, required},
     fechasolicitud:{type:String, required:true},
     fechainicio : {type: String },
     fechafin : {type: String },

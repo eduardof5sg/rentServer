@@ -4,7 +4,7 @@ import juegoModel from "../modelos/juegoModel.js";
 
 export const solicitudAlquiler = async(req,res) =>{
     try {
-        const {propietario, cliente,preciofinal,fechasolicitud} = req.body
+        const {propietario, cliente,preciofinal,semanas,fechasolicitud} = req.body
         const juegoid = req.params.juegoid
 
         const userPropietario = await userModel.findById(propietario);
@@ -23,6 +23,7 @@ export const solicitudAlquiler = async(req,res) =>{
             juegoid,
             propietario,
             cliente,
+            semanas,
             preciofinal,
             fechasolicitud
         });

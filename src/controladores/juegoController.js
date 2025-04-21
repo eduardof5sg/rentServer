@@ -25,7 +25,7 @@ export const registrarJuego = async (req, res) => {
     for (const file of req.files) {
       // Redimensionamos y procesamos la imagen usando Sharp
       const processedBuffer = await sharp(file.buffer)
-        .resize(640, 480) // Redimensionar la imagen
+        .resize(474, 580) // Redimensionar la imagen
         .toFormat("jpeg") // Convertir a formato JPEG para optimizar
         .toBuffer(); // Obtener el buffer procesado
 
