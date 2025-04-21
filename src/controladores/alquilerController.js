@@ -145,6 +145,8 @@ export const eliminarSolicitud = async (req, res) => {
     }
   };
 
+  import juegoModel from "../modelos/juegoModel.js";
+
   export const confirmarEntrega = async (req, res) => {
     try {
       const alquilerid = req.params.alquilerid;
@@ -161,12 +163,19 @@ export const eliminarSolicitud = async (req, res) => {
         return res.status(400).json({ message: "Este pedido no está en reparto." });
       }
   
-      // Actualizar campos
+      // Actualizar estado y fechas
       alquiler.estado = "entregado";
-      alquiler.fechainicio = fechainicio || new Date().toISOString(); // o puedes esperar que se lo mandes tú
+      alquiler.fechainicio = fechainicio || new Date().toISOString();
       alquiler.fechafin = fechafin || new Date().toISOString();
   
       await alquiler.save();
+  
+      // Buscar el juego y actualizar totalalquileres
+      const juego = await juegoModel.findById(alquiler.juegoid);
+      if (juego) {
+        juego.totalalquileres = (juego.totalalquileres || 0) + 1;
+        await juego.save();
+      }
   
       return res.status(200).json({ message: "Entrega confirmada.", alquiler });
     } catch (error) {
@@ -174,3 +183,4 @@ export const eliminarSolicitud = async (req, res) => {
       return res.status(500).json({ message: "Error interno del servidor." });
     }
   };
+  
