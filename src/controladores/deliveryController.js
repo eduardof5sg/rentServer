@@ -65,8 +65,9 @@ export const alquileresPorCP = async (req, res) => {
     try {
         const cpRepartidor = req.user.codigopostal
         const repartos = await alquilerModel.find()
-        .populate('cliente', 'direccion codigopostal nombre apellidos')
-        .populate('propietario', 'direccion nombre apellidos');
+        .populate('cliente', 'direccion codigopostal nombre telefono')
+        .populate('propietario', 'direccion nombre telefono')
+        .populate('juegoid', 'titulo');
 
         if (!repartos || repartos.lenght === 0) {
             return res.status(404).json({ message: "No existe ninguna solicitud de reparto." });

@@ -145,8 +145,7 @@ export const eliminarSolicitud = async (req, res) => {
     }
   };
 
-  import juegoModel from "../modelos/juegoModel.js";
-
+  
   export const confirmarEntrega = async (req, res) => {
     try {
       const alquilerid = req.params.alquilerid;
@@ -172,11 +171,11 @@ export const eliminarSolicitud = async (req, res) => {
   
       // Buscar el juego y actualizar totalalquileres
       const juego = await juegoModel.findById(alquiler.juegoid);
-      if (juego) {
-        juego.totalalquileres = (juego.totalalquileres || 0) + 1;
-        await juego.save();
+      if (!juego) {
+        return res.status(400).json({message:"No se encontro el juego"})
       }
-  
+       juego.totalalquileres = (juego.totalalquileres || 0) + 1;
+        await juego.save();
       return res.status(200).json({ message: "Entrega confirmada.", alquiler });
     } catch (error) {
       console.error("Error al confirmar entrega:", error);
