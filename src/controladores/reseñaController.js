@@ -20,7 +20,8 @@ export const nuevaReseña = async(req,res) =>{
 export const reseñasUser = async (req,res)=>{
     const receptorid = req.params.receptorid
     try {
-        const allReseñas = await reseñaModel.find({receptorid});
+        const allReseñas = await reseñaModel.find({receptorid})
+        .populate('emisorid', 'nombre verificado')
         if(!allReseñas) {
             return res.status(400).json({message:"No existen reseñas para este  usuario"})
         }
