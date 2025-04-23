@@ -190,6 +190,7 @@ export const eliminarSolicitud = async (req, res) => {
       const alquiler = await alquilerModel.findOne({
         _id:alquilerid,
         propietario
+        
       })
       if(!alquiler){
         return res.status(400).json({message:"El alquiler no existe"})
@@ -198,7 +199,11 @@ export const eliminarSolicitud = async (req, res) => {
        return res.status(400).json({message:"Este pedido no ha sido entregado y no se puede devolver"})
       }
       alquiler.estado = "devuelto"
+      const juegoid = alquiler.juegoid
       await alquiler.save()
+      await juegoModel.findByIdAndUpdate(juegoid, {
+        disponibilidad: true,
+      });
       res.status(200).json({message:"Gracias por confirmar la devolucion", alquiler})
     } catch (error) {
       res.status(400).json({message:"Error en el servidor"})
