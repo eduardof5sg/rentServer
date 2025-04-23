@@ -1,4 +1,5 @@
 import juegoModel from "../modelos/juegoModel.js";
+import alquilerModel from "../modelos/alquilerModel.js";
 
 import { firebaseConnection } from "../firebase/firebase.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -125,7 +126,20 @@ export const disponibilidadJuego = async (req, res) => {
       return res.status(404).json({ message: "El juego no existe" });
     }
 
-    // Alternamos la disponibilidad
+    // Buscar todos los alquileres que usan este juego
+    const alquileres = await alquilerModel.find({ juegoid });
+
+    // Si hay alquileres y al menos uno no está devuelto, bloquear el cambio
+    if (alquileres.length > 0) {
+      const hayNoDevueltos = alquileres.some(alquiler => alquiler.estado !== "devuelto");
+      if (hayNoDevueltos) {
+        return res.status(400).json({
+          message: "No puedes cambiar la disponibilidad: el juego tiene alquileres activos o pendientes."
+        });
+      }
+    }
+
+    // Si no hay alquileres o todos están devueltos, permitimos el cambio
     game.disponibilidad = !game.disponibilidad;
     await game.save();
 
@@ -133,6 +147,7 @@ export const disponibilidadJuego = async (req, res) => {
       message: `Juego ${game.disponibilidad ? "habilitado" : "inhabilitado"}`,
       game
     });
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error al actualizar disponibilidad" });
