@@ -116,21 +116,25 @@ export const juegounico = async(req,res) =>{
   }
 }
 
-export const disponibilidadJuego = async(req,res)=>{
+export const disponibilidadJuego = async (req, res) => {
   try {
-    const juegoid  = req.params.juegoid;
-    const game = await juegoModel.findOne({_id:juegoid});
-    if(!game){
-      return res.status(400).json({message:"El juego no existe"})
+    const juegoid = req.params.juegoid;
+    const game = await juegoModel.findById(juegoid);
+
+    if (!game) {
+      return res.status(404).json({ message: "El juego no existe" });
     }
 
-    if (game.disponibilidad !== true){
-      return res.status(400).json({message:"No puedes inhabilitar el juego"})
-    }
-    game.disponibilidad = false;
-    await game.save()
-    res.status(200).json({message:"Juego inhabilitado", game})
+    // Alternamos la disponibilidad
+    game.disponibilidad = !game.disponibilidad;
+    await game.save();
+
+    res.status(200).json({
+      message: `Juego ${game.disponibilidad ? "habilitado" : "inhabilitado"}`,
+      game
+    });
   } catch (error) {
-    
+    console.error(error);
+    res.status(500).json({ message: "Error al actualizar disponibilidad" });
   }
-}
+};
