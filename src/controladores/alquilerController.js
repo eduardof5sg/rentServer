@@ -183,3 +183,24 @@ export const eliminarSolicitud = async (req, res) => {
     }
   };
   
+  export const confirmarDevolucion = async(req,res) =>{
+    try {
+      const alquilerid = req.params.alquilerid;
+      const {propietario} = req.body
+      const alquiler = await alquilerModel.findOne({
+        _id:alquilerid,
+        propietario
+      })
+      if(!alquiler){
+        return res.status(400).json({message:"El alquiler no existe"})
+      }
+      if(alquiler.estado !=="entregado"){
+       return res.status(400).json({message:"Este pedido no ha sido entregado y no se puede devolver"})
+      }
+      alquiler.estado = "devuelto"
+      await alquiler.save()
+      res.status(200).json({message:"Gracias por confirmar la devolucion", alquiler})
+    } catch (error) {
+      res.status(400).json({message:"Error en el servidor"})
+    }
+  }
