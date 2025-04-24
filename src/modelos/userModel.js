@@ -14,6 +14,7 @@ const userSchema = mongoose.Schema({
       default: 'user'
     },
     verificado : {type:Boolean, default:false},
+    usuarioconfianza : {type:Boolean, default:false},
     fotoperfil: { type: String },
     estadocuenta: {
         type: String,
