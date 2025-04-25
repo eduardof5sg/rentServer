@@ -111,39 +111,43 @@ export const juegosPedidos = async(req,res) =>{
 }
 
 export const eliminarSolicitud = async (req, res) => {
-    try {
-      const solicitudid = req.params.solicitudid;
-      const { propietario } = req.body;
-  
-      if (!solicitudid || !propietario) {
-        return res.status(400).json({ message: "Faltan datos necesarios" });
-      }
-  
-      // Buscar el alquiler
-      const alquiler = await alquilerModel.findById({_id:solicitudid});
-  
-      if (!alquiler) {
-        return res.status(404).json({ message: "Solicitud de alquiler no encontrada" });
-      }
-  
-      if (alquiler.propietario.toString() !== propietario) {
-        return res.status(403).json({ message: "No tienes permiso para eliminar esta solicitud" });
-      }
-  
-      // Cambiar la disponibilidad del juego a true
-      await juegoModel.findByIdAndUpdate(alquiler.juegoid, {
-        disponibilidad: true,
-      });
-  
-      // Eliminar la solicitud de alquiler
-      await alquilerModel.findByIdAndDelete(solicitudid);
-  
-      res.status(200).json({ message: "Solicitud eliminada y disponibilidad actualizada" });
-    } catch (error) {
-      console.error("Error al eliminar solicitud:", error);
-      res.status(500).json({ message: "Error al eliminar la solicitud" });
+  try {
+    const solicitudid = req.params.solicitudid;
+    const { usuarioId } = req.body;
+
+    if (!solicitudid || !usuarioId) {
+      return res.status(400).json({ message: "Faltan datos necesarios" });
     }
-  };
+
+    // Buscar la solicitud de alquiler
+    const alquiler = await alquilerModel.findById(solicitudid);
+
+    if (!alquiler) {
+      return res.status(404).json({ message: "Solicitud de alquiler no encontrada" });
+    }
+
+    // Verificar si el usuario es el propietario o el cliente
+    const esPropietario = alquiler.propietario.toString() === usuarioId;
+    const esCliente = alquiler.cliente.toString() === usuarioId;
+
+    if (!esPropietario && !esCliente) {
+      return res.status(403).json({ message: "No tienes permiso para eliminar esta solicitud" });
+    }
+
+    // Cambiar la disponibilidad del juego a true
+    await juegoModel.findByIdAndUpdate(alquiler.juegoid, {
+      disponibilidad: true,
+    });
+
+    // Eliminar la solicitud de alquiler
+    await alquilerModel.findByIdAndDelete(solicitudid);
+
+    res.status(200).json({ message: "Solicitud eliminada y disponibilidad actualizada" });
+  } catch (error) {
+    console.error("Error al eliminar solicitud:", error);
+    res.status(500).json({ message: "Error al eliminar la solicitud" });
+  }
+};
 
   
   export const confirmarEntrega = async (req, res) => {
